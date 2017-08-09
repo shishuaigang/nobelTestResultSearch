@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>趋势查询</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../static/jqueryui/jquery-ui.css">
+    <script src="../static/jqueryui/external/jquery/jquery.js"></script>
+    <script src="../static/jqueryui/jquery-ui.js"></script>
+    <script>
+        $.ajax({
+            cache: true,
+            type: "get",
+            url: "/detail",
+            data: $('#searchform').serialize(),
+            async: false,
+            error: function (request) {
+                //alert("Connection error");
+            },
+            success: function (data) {
+            }
+        });
+        $(function () {
+            $("#bt").datepicker({dateFormat: "yymmdd"});
+            $("#et").datepicker({dateFormat: "yymmdd"});
+        });
+    </script>
+</head>
+<body>
+<h2 align="center">Inroad API历史趋势查询</h2>
+<div style="width:100%;text-align:center">
+    <form name="searchfrom" id="searchform" method="get" action="/detail">
+        开始日期:<input type="text" id="bt" name="begintime" value="{{request.args.get('begintime')}}">
+        结束日期:<input type="text" id="et" name="endtime" value="{{request.args.get('endtime')}}">
+        API名字:<input type="text" name="apiname" value="{{request.args.get('apiname')}}" onFocus="javascript:if(this.value=='API名字')this.value='';"
+                     onBlur="if (this.value == '') {this.value = 'API名字';}">
+        <input type="submit" value="查询">
+    </form>
+    <img src="/search?begintime={{request.args.get('begintime')}}0001&endtime={{request.args.get('endtime')}}2359&apiname={{request.args.get('apiname')}}"/>
+</div>
+</body>
+</html>
