@@ -1,5 +1,6 @@
 # coding=utf-8
 import pymssql
+
 import matplotlib.pyplot as plt
 import pylab as pl
 
@@ -10,23 +11,16 @@ class Prepare:
         self.endtime = et
         self.apiname = apiname
 
-    def sql_sentence(self):  # 拼接sql语句
-        pre_condition = "use Inroad_Test_Result select Response_time,TestNo from Nobel_Crawler_Test where "
-        condition1 = "API_URL='" + self.apiname + "'"
-        condition2 = "TestNo >='" + self.begintime + "'"
-        condition3 = "TestNo <='" + self.endtime + "'"
-        condition4 = "order by TestNo asc"  # 时间升序进行排列
-        SQL = pre_condition + condition1 + " AND " + condition2 + " AND " + condition3 + condition4
-        return SQL
-
     def read_db(self):
-        sql = self.sql_sentence()
+        # sql参数化结构查询
+        args = (self.apiname, self.begintime, self.endtime)
+        sql = "use Inroad_Test_Result select Response_time,TestNo from Nobel_Crawler_Test where API_URL = %s AND TestNo >= %s AND TestNo <= %s order by TestNo asc"
         res = []
         conn = pymssql.connect(host="192.168.31.99\\sql2012", user="sgshi", password="ssg12345!",
                                database="Inroad_Test_Result")
         cur = conn.cursor()
         print u"连接数据库成功"
-        cur.execute(sql)
+        cur.execute(sql, args)
         for row in cur:
             res.append(row)
         conn.commit()

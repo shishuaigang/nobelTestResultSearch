@@ -24,7 +24,6 @@ def search():
     # request.form.get('endtime') post获取参数的方式
     name = request.args.get('apiname')  # get获取参数的方式
     p = Prepare(bt, et, name)
-    p.sql_sentence()
     p.create_qushitu()
     with open('qushi.png', 'rb') as f:
         return Response(f.read(), mimetype='image/png')
